@@ -7,6 +7,7 @@ public abstract class Grid : MonoBehaviour{
     private Vector3 pos;
     private Mover mover;
     private PlayerController player;
+    private float height;
 
     public Vector3 GetPos() { return pos; }
     public void SetPos(Vector3 p) { pos = p; }
@@ -23,5 +24,7 @@ public abstract class Grid : MonoBehaviour{
     public virtual void Initialize() { }
     public abstract bool isWalkable();
     public virtual bool isGoal() { return false; }
-    //public abstract int GetHeight();
+
+    public virtual float GetHeight() { return height; }
+    public virtual void SetHeight(float value) { height = value; }
 }

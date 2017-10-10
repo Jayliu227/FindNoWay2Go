@@ -70,40 +70,51 @@ public class MapGenerator : MonoBehaviour {
         {
             Instantiate(emptyPrefab, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity);
         }
-        foreach (GridMatcher g in gridMatcher)
-        {
-            if (currentPixelColor.Equals(g.matchColor))
+            foreach (GridMatcher g in gridMatcher)
             {
-                GameObject obj = Instantiate(g.matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity) as GameObject;
-                Grid objGrid = obj.GetComponent<Grid>();
-                if (objGrid != null)
-                {
-                    grids[x, y] = objGrid;
-                    objGrid.SetPos(x, y);
-                    if (objGrid.GetComponent<Grid_Portal>() != null)
-                        portals.Add(obj.GetComponent<Grid_Portal>());
-                    else
-                        objGrid.Initialize();
-                }else if(obj.GetComponent<Mover>())
-                {
-                    movers.Add(obj.GetComponent<Mover>());
-                    obj.transform.position += Vector3.up * 1.51f;  
-                    GameObject floor = Instantiate(gridMatcher[0].matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity);
-                    floor.GetComponent<Grid>().SetPos(x, y);
-                    grids[x, y] = floor.GetComponent<Grid>();
-                    obj.GetComponent<Mover>().Initialize(floor.GetComponent<Grid>());
-                }else if (obj.GetComponent<PlayerController>())
-                {
-                    player = obj;
-                    GameObject floor = Instantiate(gridMatcher[0].matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity);
-                    floor.GetComponent<Grid>().SetPos(x, y);
-                    grids[x, y] = floor.GetComponent<Grid>();
-                    obj.GetComponent<PlayerController>().Initialize(floor.GetComponent<Grid>());
-                }
+            /* float R = currentPixelColor.r;
+             float G = currentPixelColor.g;
+             float B = currentPixelColor.b;
+             float heightOffSet = currentPixelColor.r / 100;
+            if (G == g.matchColor.g || B == g.matchColor.b)
+            {*/
+            if (currentPixelColor.Equals(g.matchColor)) { 
+                    
+                    GameObject obj = Instantiate(g.matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity) as GameObject;
+                    Grid objGrid = obj.GetComponent<Grid>();
 
-                obj.transform.SetParent(environmentParent);
-            }
-        }
+                    if (objGrid != null)
+                    {
+                        grids[x, y] = objGrid;
+                        objGrid.SetPos(x, y);
+                        if (objGrid.GetComponent<Grid_Portal>() != null)
+                            portals.Add(obj.GetComponent<Grid_Portal>());
+                        else
+                            objGrid.Initialize();
+                    }
+                    else if (obj.GetComponent<Mover>())
+                    {
+                        movers.Add(obj.GetComponent<Mover>());
+                        obj.transform.position += Vector3.up * 1.51f;
+
+                        GameObject floor = Instantiate(gridMatcher[0].matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity);
+                        floor.GetComponent<Grid>().SetPos(x, y);
+                        grids[x, y] = floor.GetComponent<Grid>();
+
+                        obj.GetComponent<Mover>().Initialize(floor.GetComponent<Grid>());
+                    }
+                    else if (obj.GetComponent<PlayerController>())
+                    {
+                        player = obj;
+                        GameObject floor = Instantiate(gridMatcher[0].matchObj, new Vector3(x - mapSource.width / 2, 0f, y - mapSource.height / 2), Quaternion.identity);
+                        floor.GetComponent<Grid>().SetPos(x, y);
+                        grids[x, y] = floor.GetComponent<Grid>();
+                        obj.GetComponent<PlayerController>().Initialize(floor.GetComponent<Grid>());
+                    }
+
+                    obj.transform.SetParent(environmentParent);
+                }
+        }     
     }
 
     private void InitializePortals (){
