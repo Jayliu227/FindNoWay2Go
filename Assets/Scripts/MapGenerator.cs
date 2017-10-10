@@ -15,6 +15,7 @@ public class MapGenerator : MonoBehaviour {
 
     private Grid[,] grids;
     private List<Mover> movers;
+    private List<Grid_Portal> portals;
     private Color floorColor;
 
     void Start () {
@@ -25,7 +26,9 @@ public class MapGenerator : MonoBehaviour {
 
         grids = new Grid[mapSource.width, mapSource.height];
         movers = new List<Mover>();
+        portals = new List<Grid_Portal>();
         GenerateMap();
+        InitializePortals();
         floorColor = gridMatcher[0].matchObj.GetComponent<Renderer>().sharedMaterial.color;
         foreach(Mover m in movers)
         {
@@ -77,7 +80,10 @@ public class MapGenerator : MonoBehaviour {
                 {
                     grids[x, y] = objGrid;
                     objGrid.SetPos(x, y);
-                    objGrid.Initialize();
+                    if (objGrid.GetComponent<Grid_Portal>() != null)
+                        portals.Add(obj.GetComponent<Grid_Portal>());
+                    else
+                        objGrid.Initialize();
                 }else if(obj.GetComponent<Mover>())
                 {
                     movers.Add(obj.GetComponent<Mover>());
@@ -100,8 +106,20 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
+    private void InitializePortals (){
+        foreach (Grid_Portal p in portals)
+        {
+            p.Initialize();
+        }
+    }
+
     public Grid[,] GetGrids()
     {
         return grids;
+    }
+
+    public List<Grid_Portal> GetPortals()
+    {
+        return portals;
     }
 }

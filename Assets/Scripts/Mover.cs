@@ -6,6 +6,8 @@ public class Mover : MonoBehaviour {
 
     private Grid currentGrid;
     private Grid nextGrid;
+    public int goalNum;
+    public void SetNextGrid(Grid newGrid) { nextGrid = newGrid; }
 
     private float moveSpeed = 1.2f;
     private bool atGoal = false;
@@ -49,9 +51,19 @@ public class Mover : MonoBehaviour {
             yield return null;
         }
         yield return null;
-        if (nextGrid.isGoal()){
-            atGoal = true;
+        if (nextGrid.isGoal())
+        {
+            Grid_Goal g = (Grid_Goal)nextGrid;
+            if(g.goalNum == goalNum){
+                atGoal = true;
+            }
         }
+        if(nextGrid.GetComponent<Grid_Portal>()!= null)
+        {
+            nextGrid.FreeMover();
+            nextGrid.GetComponent<Grid_Portal>().Transport(this);
+        }
+            
         currentGrid.FreeMover();
         currentGrid = nextGrid;
     }
@@ -84,7 +96,7 @@ public class Mover : MonoBehaviour {
                     break;
                 case 1: dir = -transform.forward;
                     break;
-                case 2: dir = -transform.right;
+                case 2: dir = - transform.right;
                     break;
                 default: dir = Vector3.zero;
                     Debug.Log("No way to go");

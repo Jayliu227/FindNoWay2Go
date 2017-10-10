@@ -6,6 +6,7 @@ using UnityEngine;
 public class Grid_Goal : Grid
 {
     private bool walkable = true;
+    public int goalNum;
     public override bool isWalkable()
     {
         return walkable;

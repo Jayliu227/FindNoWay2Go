@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour {
             currentGrid = gridStandingAt;
             currentGrid.SetPlayer(this);
         }
-	}
+    }
 
     void IsometricMovement()
     {
@@ -60,9 +60,9 @@ public class PlayerController : MonoBehaviour {
 
         //Vector3 input = new Vector3(horizontalInput, 0, verticalInput);
         Vector3 input = anchorPivot.right * horizontalInput + anchorPivot.forward * verticalInput;
-        transform.position += input * Time.deltaTime * 7f;
-
-        if(input.magnitude != 0)
+        //transform.position += input * Time.deltaTime * 7f;
+        GetComponent<CharacterController>().SimpleMove(input * 7f);
+        if (input.magnitude != 0)
         {
             Quaternion targetRot = Quaternion.LookRotation(input, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 15f);
@@ -88,6 +88,17 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    /* not working
+    bool CheckFront()
+    {
+        RaycastHit it;
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out it, 0.6f, (1 << 8)))
+        {
+            return false;
+        }
+        return true;
+    }
     // deprecated:: not really flexible
     /*
     void Move()
