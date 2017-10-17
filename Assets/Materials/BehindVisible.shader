@@ -47,7 +47,7 @@ Shader "Unlit/Visible"
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
 				fixed4 n = fixed4(v.normal, 0);
-				o.normal = mul(v.normal, unity_WorldToObject);
+				o.normal = mul(n, unity_WorldToObject).xyz;
 				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 
 				return o;

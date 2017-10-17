@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour {
    
@@ -10,6 +11,10 @@ public class MapGenerator : MonoBehaviour {
     public GridMatcher[] gridMatcher;
     public Transform environmentParent;
     public GameObject emptyPrefab;
+    public Text text;
+    public GameObject tunnel;
+
+    [HideInInspector]
     public GameObject player;
     #endregion
 
@@ -17,8 +22,8 @@ public class MapGenerator : MonoBehaviour {
     private List<Mover> movers;
     private List<Grid_Portal> portals;
     private Color floorColor;
-
-    void Start () {
+    
+    void OnEnable () {
         if (mapGenerator == null)
         {
             mapGenerator = this;
@@ -34,6 +39,23 @@ public class MapGenerator : MonoBehaviour {
         {
             m.StartMovement();
         }
+
+        foreach(Grid_Portal p in portals)
+        {
+            if (portals.IndexOf(p) % 2 == 0)
+            {
+                if(p.GetPairPortal() != null)
+                {
+                    Vector3 src = MapInfo.mapInfo.ConvertGrid2World(p);
+                    Vector3 dest = MapInfo.mapInfo.ConvertGrid2World(p.GetPairPortal());
+                    Vector3 middlePoint = (src + dest) / 2;
+
+                    GameObject t = Instantiate(tunnel, middlePoint + Vector3.up, Quaternion.identity);
+                    t.transform.forward = (src - dest).normalized;
+                    t.transform.localScale = new Vector3(1f, 1f, Vector3.Distance(src, dest)/2 );
+                }
+            }
+        }
     }
     
     private void Update()
@@ -48,6 +70,12 @@ public class MapGenerator : MonoBehaviour {
                         grids[i, j].GetComponent<Renderer>().material.color = grids[i, j].GetComponent<Grid_Floor>().HasPlayer() ? Color.yellow : floorColor;
                 }
             }
+        }
+
+        if (CheckWinningCondition())
+        {
+            text.gameObject.SetActive(true);
+            text.text = "Congrad! You've conquered the level.";
         }
     }
 
@@ -115,6 +143,18 @@ public class MapGenerator : MonoBehaviour {
                     obj.transform.SetParent(environmentParent);
                 }
         }     
+    }
+
+    public bool CheckWinningCondition()
+    {
+        int i = 0;
+        foreach(Mover m in movers)
+        {
+            if (m.atGoal)
+                i++;
+        }
+
+        return i == movers.Count;
     }
 
     private void InitializePortals (){

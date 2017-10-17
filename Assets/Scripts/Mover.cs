@@ -10,7 +10,7 @@ public class Mover : MonoBehaviour {
     public void SetNextGrid(Grid newGrid) { nextGrid = newGrid; }
 
     private float moveSpeed = 1.2f;
-    private bool atGoal = false;
+    public bool atGoal = false;
 
     public void Initialize(Grid g)
     {
@@ -46,8 +46,7 @@ public class Mover : MonoBehaviour {
         {
             target = ConvertGridToWorldPos(nextGrid);
             transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * moveSpeed);
-            //transform.position += (target- transform.position).normalized * Time.deltaTime * moveSpeed;
-            //Debug.Log(transform.position + " , " + target);
+            //GetComponent<CharacterController>().Move((target - transform.position).normalized * Time.deltaTime);
             yield return null;
         }
         yield return null;
@@ -102,6 +101,7 @@ public class Mover : MonoBehaviour {
                     Debug.Log("No way to go");
                     break;
             }
+            if (dir == Vector3.zero) break;
             i++;
             nextPos = currentGrid.GetPos() + dir;
             nextGrid2Move = MapInfo.mapInfo.GetGridAt((int)nextPos.x, (int)nextPos.z);

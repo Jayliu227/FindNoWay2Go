@@ -6,6 +6,9 @@ using UnityEngine;
 public class Grid_Portal : Grid
 {
     private Grid_Portal pairPortal = null;
+    public Grid_Portal GetPairPortal() { return pairPortal; }
+    public void SetPortal(Grid_Portal p) { pairPortal = p; }
+
     public override bool isWalkable()
     {
         return true;
@@ -19,22 +22,14 @@ public class Grid_Portal : Grid
         
         if (m.GetPortals().IndexOf(this) % 2 == 0)
         {
+            //pairPortal = GetPortalWithNextOneInList(m);
             pairPortal = GetPortalWithNextOneInList(m);
-            if(pairPortal != null)
-            {
-                pairPortal.pairPortal = this;
-            }
-        }
-        /*
-        if(m.GetPortals().IndexOf(this) < m.GetPortals().Count / 2)
-        {
-            
-            pairPortal = GetPortalWithLargestDistance(m);
+
             if (pairPortal != null)
             {
-                pairPortal.pairPortal = this;
+                pairPortal.SetPortal(this);
             }
-        }*/
+        }
     }
 
     // has certain problem for now, sometimes it turns into a nonwalkable block
@@ -49,25 +44,25 @@ public class Grid_Portal : Grid
     // this one is still problematic
     private Grid_Portal GetPortalWithLargestDistance(MapGenerator m)
     {
-        Grid_Portal g = null;
-        float distance = 0f;
+        float largestDistance = 0f;
+        Grid_Portal result = null;
 
         foreach (Grid_Portal p in m.GetPortals())
         {
-            if (p == this || p.pairPortal != null) continue;
+            if (p == this) continue;
+            if (p.GetPairPortal() != null ) continue;
 
-            float mahattan_dist = (GetPos().x - p.GetPos().x) + (GetPos().z - p.GetPos().z);
-            if(mahattan_dist > distance)
-            {
-                distance = mahattan_dist;
-                g = p;
-            }
+            float dist = Mathf.Abs((GetPos().x - p.GetPos().x) + (GetPos().z - p.GetPos().z));
+            if (largestDistance < dist)
+                result = p;
         }
-        if(g != null)
+
+        if(result != null)
         {
-            return g;
-        }else {
-            Debug.Log("1111" + MapInfo.mapInfo.ConvertGrid2World(this));
+            return result;
+        }else
+        {
+            Debug.Log("Problem with portals");
             return null;
         }
     }

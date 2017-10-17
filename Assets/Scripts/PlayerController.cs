@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 gridWorldPos = MapInfo.mapInfo.ConvertGrid2World(g);
         transform.position = new Vector3(gridWorldPos.x, 2f, gridWorldPos.z);
         currentGrid = g;
-        anchorPivot = Camera.main.transform.parent;
+        anchorPivot = Camera.main.transform.parent.parent;
         g.SetPlayer(this);
 	}
 

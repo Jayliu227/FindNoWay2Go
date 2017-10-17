@@ -35,10 +35,14 @@ public class CameraMovement : MonoBehaviour {
 
         if (Input.GetMouseButton(1))
         {
-            if (Input.GetKey(KeyCode.LeftAlt))
-                RotateAlongXAxis();
-            else
-                RotateAlongYAxis();
+            /*
+                if (Input.GetKey(KeyCode.LeftAlt))
+                    RotateAlongXAxis();
+                else
+                    RotateAlongYAxis();
+            */
+            RotateAlongXAxis();
+            RotateAlongYAxis();
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
