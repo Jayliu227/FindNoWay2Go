@@ -55,6 +55,7 @@ public class Mover : MonoBehaviour {
             Grid_Goal g = (Grid_Goal)nextGrid;
             if(g.goalNum == goalNum){
                 atGoal = true;
+                MapGenerator.mapGenerator.CheckWinningCondition();
             }
         }
         if(nextGrid.GetComponent<Grid_Portal>()!= null)

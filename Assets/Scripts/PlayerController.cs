@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour {
                 break;
         }
         Vector3 nextPos =  currentGrid.GetPos() + dirOffset;
-        Grid gridStandingAt = MapInfo.mapInfo.GetGridAt(Mathf.RoundToInt(transform.position.x) + MapGenerator.mapGenerator.mapSource.width / 2, Mathf.RoundToInt(transform.position.z) + MapGenerator.mapGenerator.mapSource.height / 2);
+        Grid gridStandingAt = MapInfo.mapInfo.GetGridAt(Mathf.RoundToInt(transform.position.x) + MapGenerator.mapGenerator.currentMap.width / 2, Mathf.RoundToInt(transform.position.z) + MapGenerator.mapGenerator.currentMap.height / 2);
         gridInFront = MapInfo.mapInfo.GetGridAt((int)nextPos.x, (int)nextPos.z);
 
         if (gridInFront != null && gridInFront.isWalkable())
@@ -82,7 +82,8 @@ public class PlayerController : MonoBehaviour {
                     Vector3 placeToBox = MapInfo.mapInfo.ConvertGrid2World(gf) + Vector3.up * 1f;
                     gf.setPlaceable(false);
                     gf.setWalkable(false);
-                    Instantiate(boxPrefab, placeToBox, Quaternion.identity);
+                    GameObject box = Instantiate(boxPrefab, placeToBox, Quaternion.identity);
+                    box.transform.SetParent(GameManager.gameManager.transform.GetChild(1));
                 }
             }
         }

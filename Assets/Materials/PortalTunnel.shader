@@ -13,7 +13,7 @@
 		Pass
 		{
 			Zwrite off
-			Ztest always
+			//Ztest always
 			cull off
 			blend srcalpha oneminussrcalpha
 			CGPROGRAM

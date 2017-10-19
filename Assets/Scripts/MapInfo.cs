@@ -20,8 +20,8 @@ public class MapInfo : MonoBehaviour {
 
     public Grid GetNextGrid(int x, int y, Vector3 dir)
     {
-        if(x + dir.x < MapGenerator.mapGenerator.mapSource.width && x + dir.x > 0
-            && y + dir.z < MapGenerator.mapGenerator.mapSource.height && y + dir.z > 0)
+        if(x + dir.x < MapGenerator.mapGenerator.currentMap.width && x + dir.x > 0
+            && y + dir.z < MapGenerator.mapGenerator.currentMap.height && y + dir.z > 0)
         {
             return GetGridAt((int)(x + dir.x), (int)(y + dir.y));
         }
@@ -30,6 +30,6 @@ public class MapInfo : MonoBehaviour {
 
     public Vector3 ConvertGrid2World(Grid g)
     {
-        return new Vector3(g.GetPos().x - MapGenerator.mapGenerator.mapSource.width/2, 0f, g.GetPos().z - MapGenerator.mapGenerator.mapSource.height/2);
+        return new Vector3(g.GetPos().x - MapGenerator.mapGenerator.currentMap.width/2, 0f, g.GetPos().z - MapGenerator.mapGenerator.currentMap.height/2);
     }
 }
