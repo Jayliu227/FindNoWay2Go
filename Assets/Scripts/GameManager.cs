@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour {
     public GameObject gameStatePanel;
     public bool firstTimePlay = true;
 
-    private Transform levelSelector;
+    public Transform levelSelector;
+    public Transform coverObj;
 
     private void Start()
     {
@@ -30,6 +31,16 @@ public class GameManager : MonoBehaviour {
         RenewGame();
     }
 
+    public void EndGame()
+    {
+        Application.Quit();
+    }
+
+    public void ShowManual(GameObject manual)
+    {
+        manual.SetActive(!manual.activeSelf);
+    }
+
     public void BackToSelection()
     {
         Destroy(transform.GetChild(1).gameObject);
@@ -37,6 +48,20 @@ public class GameManager : MonoBehaviour {
 
         gameStatePanel.SetActive(false);
         ShowButtonNot(false);
+    }
+
+    public void BackToMenu()
+    {
+        levelSelector.parent.gameObject.SetActive(false);
+        levelSelector.gameObject.SetActive(false);
+        coverObj.gameObject.SetActive(true);
+    }
+
+    public void StartGame_TransitFromCoverToLevel()
+    {
+        levelSelector.parent.gameObject.SetActive(true);
+        levelSelector.gameObject.SetActive(true);
+        coverObj.gameObject.SetActive(false);
     }
 
     public void StartGame_LevelSelector(Transform self)
