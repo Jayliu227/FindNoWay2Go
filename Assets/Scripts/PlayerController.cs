@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public GameObject boxPrefab;
+    public AudioClip placeBox;
     private Transform anchorPivot;
     private Grid currentGrid;
     private Grid gridInFront;
@@ -84,6 +85,10 @@ public class PlayerController : MonoBehaviour {
                     gf.setWalkable(false);
                     GameObject box = Instantiate(boxPrefab, placeToBox, Quaternion.identity);
                     box.transform.SetParent(GameManager.gameManager.transform.GetChild(1));
+
+                    AudioSource source = GetComponent<AudioSource>();
+                    source.clip = placeBox;
+                    source.Play();
                 }
             }
         }
